@@ -5,7 +5,7 @@ A modern **Task Tracker App** built with **React Native**, **TypeScript**, and *
 
 This project demonstrates best practices in **state management**, **local storage**, and **modular architecture** for building scalable React Native applications.
 
-![task Tracker Demo](./assets/taskTrackerDemo.gif)
+![task Tracker Demo](./assets/demoTask.gif)
 
 Main Features
 -------------
