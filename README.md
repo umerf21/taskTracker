@@ -1,97 +1,191 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+Task Tracker — React Native (TypeScript)
+========================================
 
-# Getting Started
+A modern **Task Tracker App** built with **React Native**, **TypeScript**, and **Redux Toolkit**, showcasing clean architecture, data persistence, and offline-first capabilities.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+This project demonstrates best practices in **state management**, **local storage**, and **modular architecture** for building scalable React Native applications.
 
-## Step 1: Start Metro
+![task Tracker Demo](./assets/taskTrackerDemo.gif)
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+Main Features
+-------------
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+1.  State management using Redux Toolkit for predictable, scalable data flow
+2.  Persistent local storage with Redux Persist and AsyncStorage
+3.  Offline-first logic with simulated network synchronization
+4.  Modular architecture with reusable UI components and hooks
+5.  TypeScript-based development for strong type safety
+6.  Smooth user experience with React Native LayoutAnimation
+7.  Jest unit testing for Redux and persistence logic
+8.  Ready-to-extend structure for real-world scalability
+    
 
-```sh
-# Using npm
-npm start
-
-# OR using Yarn
-yarn start
+Folder Structure
+----------------
+```
+task-tracker/  
+├── src/  
+│   ├── components/  
+│   │   ├── TaskInput.tsx         # Task creation input field  
+│   │   ├── TaskItem.tsx          # Reusable task item component  
+│   ├── store/  
+│   │   ├── index.ts              # Redux store with persistence setup  
+│   │   └── taskSlice.ts          # Redux slice for tasks  
+│   ├── hooks/  
+│   │   └── useNetworkSync.ts     # Simulated offline sync logic  
+│   ├── storage/  
+│   │   └── asyncStorage.ts       # AsyncStorage helpers  
+│   ├── utils/  
+│   │   └── helpers.ts            # Utility and helper functions  
+│   ├── types/  
+│   │   └── index.ts              # Shared TypeScript types  
+│   ├── App.tsx                   # Main entry component  
+│   └── ...  
+├── __tests__/store.test.ts       # Unit tests for Redux store  
+├── package.json  
+└── README.md   `
 ```
 
-## Step 2: Build and run your app
+### Key Modules
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+*   **components/** — Reusable and composable UI components
+*   **store/** — Redux Toolkit slices, reducers, and persistence setup
+*   **hooks/** — Custom logic for Tasks, redux, etc.    
+*   **types/** — Centralized type definitions
+    
 
-### Android
+Tech Stack
+----------
 
-```sh
-# Using npm
-npm run android
+### Core
 
-# OR using Yarn
-yarn android
+*   React Native — Cross-platform mobile app development
+*   TypeScript — Static typing for JavaScript
+    
+
+### State Management
+
+*   Redux Toolkit — Modern Redux with simplified configuration
+*   Redux Persist — Persistent Redux state across sessions  
+*   AsyncStorage — Local device storage
+    
+
+### UI and Animation
+
+*   React Native — Core components and APIs
+*   LayoutAnimation — Smooth animations for layout updates
+    
+
+### Testing
+
+*   Jest — Testing framework for JavaScript and TypeScript
+    
+
+Getting Started
+---------------
+
+### 1\. Clone the repository
+
+```   
+git clone https://github.com/yourusername/task-tracker.git  
+cd task-tracker   `
+```
+### 2\. Install dependencies
+```
+yarn install
 ```
 
-### iOS
+### 3\. Start Metro Bundler
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
+```   
+yarn start   
 ```
 
-Then, and every time you update your native dependencies, run:
+### 4\. Run the app
 
-```sh
-bundle exec pod install
+For iOS:
+
+```   
+yarn ios   
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+For Android:
 
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+```   
+yarn android   
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+Redux Persist Configuration
+---------------------------
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+Tasks are stored locally and automatically rehydrated on app restart.
 
-## Step 3: Modify your app
+**Example Store Configuration:**
+```   
+import { configureStore } from '@reduxjs/toolkit';  
+import { persistReducer, persistStore } from 'redux-persist';  
+import AsyncStorage from '@react-native-async-storage/async-storage';  
+import taskReducer from './taskSlice';  
 
-Now that you have successfully run the app, let's make changes!
+const persistConfig = {    
+        key: 'root',    
+        storage: AsyncStorage,  
+    };  
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+const persistedReducer = persistReducer(persistConfig, taskReducer);  
+export const store = configureStore({    reducer: persistedReducer,  });  
+export const persistor = persistStore(store);   
+```
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+State Flow
+----------
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+1.  User adds, edits, or deletes a task.
+2.  Redux Toolkit dispatches actions (addTask, updateTask, removeTask).
+3.  Redux Persist automatically stores the updated state in AsyncStorage.
+4.  On app restart, the state is rehydrated from local storage.
+5.  The app optionally performs a simulated sync when network is available.
+    
 
-## Congratulations! :tada:
+Example Task Object
+-------------------
 
-You've successfully run and modified your React Native App. :partying_face:
+```
+export type Task = {    
+    id: string;    
+    title: string;    
+    completed: boolean;    
+    createdAt: number;  
+};   
+```
 
-### Now what?
+Running Tests
+-------------
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+Run Jest tests for Redux store and persistence logic:
 
-# Troubleshooting
+```   
+yarn test   
+```
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+Future Improvements
+-------------------
 
-# Learn More
+*   Add swipe-to-delete using React Native Gesture Handler
+*   Implement push notifications for task reminders
+*   Add filtering and categorization of tasks
+*   Integrate with cloud backend (e.g., Firebase or Supabase)
+*   Add dark mode and custom themes
+*   Expand test coverage for reducers and UI components
+    
 
-To learn more about React Native, take a look at the following resources:
+Best Practices
+----------------------------
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+This project demonstrates:
+
+*   Scalable use of Redux Toolkit with Redux Persist in React Native
+*   Structuring mobile projects for maintainability and readability
+*   Offline-first data management principles
+*   Type-safe development using TypeScript
+*   Clean separation between UI, logic, and storage layers
