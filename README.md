@@ -32,11 +32,11 @@ task-tracker/
 │   │   ├── index.ts              # Redux store with persistence setup  
 │   │   └── taskSlice.ts          # Redux slice for tasks  
 │   ├── hooks/  
-│   │   └── useNetworkSync.ts     # Simulated offline sync logic  
-│   ├── storage/  
-│   │   └── asyncStorage.ts       # AsyncStorage helpers  
+│   │   └── useTask.ts            # Simulated task Screen logic  
+│   ├── screens/  
+│   │   └── TaskScreen            # UI for Screens  
 │   ├── utils/  
-│   │   └── helpers.ts            # Utility and helper functions  
+│   │   └── serverUtils.ts        # helper functions for online sync  
 │   ├── types/  
 │   │   └── index.ts              # Shared TypeScript types  
 │   ├── App.tsx                   # Main entry component  
@@ -87,7 +87,7 @@ Getting Started
 ### 1\. Clone the repository
 
 ```   
-git clone https://github.com/yourusername/task-tracker.git  
+git clone https://github.com/umerf21/taskTracker  
 cd task-tracker   `
 ```
 ### 2\. Install dependencies
